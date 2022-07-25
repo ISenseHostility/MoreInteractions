@@ -40,7 +40,7 @@ public class Interactions {
         }
 
         public static boolean isEntityInTag(Entity entity, TagKey<EntityType<?>> tag) {
-            return ForgeRegistries.ENTITIES.getHolder(entity.getType()).get().is(tag);
+            return ForgeRegistries.ENTITY_TYPES.getHolder(entity.getType()).get().is(tag);
         }
 
         private static ResourceLocation location(String name) {

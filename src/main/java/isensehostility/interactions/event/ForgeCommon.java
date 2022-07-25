@@ -10,7 +10,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.animal.Squid;
@@ -19,13 +18,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.item.ItemEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -37,7 +33,7 @@ public class ForgeCommon {
         boolean shearEnabled = InteractionsConfig.shearWithSwordEnabled.get();
         boolean pluckEnabled = InteractionsConfig.pluckFeathersEnabled.get();
         ItemStack stack = event.getItemStack();
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         if (shearEnabled) {
             Entity target = event.getTarget();
@@ -84,7 +80,7 @@ public class ForgeCommon {
             double foodPoisoningTime = InteractionsConfig.foodPoisoningTime.get();
             int foodPoisoningChance = InteractionsConfig.foodPoisoningChance.get();
             Severity foodPoisoningSeverity = InteractionsConfig.foodPoisoningSeverity.get();
-            LivingEntity entity = event.getEntityLiving();
+            LivingEntity entity = event.getEntity();
             ItemStack item = event.getItem();
 
             if (entity instanceof Player player && !player.isCreative() && item.is(Interactions.Tags.GIVES_FOOD_POISONING) && entity.getRandom().nextInt(100) < foodPoisoningChance) {
@@ -105,7 +101,7 @@ public class ForgeCommon {
     }
 
     @SubscribeEvent
-    public static void onEntitySpawned(EntityJoinWorldEvent event) {
+    public static void onEntitySpawned(EntityJoinLevelEvent event) {
         boolean squidTargetTurtleEnabled = InteractionsConfig.squidTargetTurtleEnabled.get();
         boolean squidTargetBoatEnabled = InteractionsConfig.squidTargetBoatEnabled.get();
 
@@ -132,7 +128,7 @@ public class ForgeCommon {
         double touchFireTime = InteractionsConfig.touchFireTime.get();
         boolean touchCactusEnabled = InteractionsConfig.touchCactusEnabled.get();
         double touchCactusDamage = InteractionsConfig.touchCactusDamage.get();
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         if (touchFireEnabled) {
             if (player.getLevel().getBlockState(event.getPos()).getBlock() == Blocks.FIRE && player.getMainHandItem().getItem() == Items.AIR) {
@@ -157,7 +153,7 @@ public class ForgeCommon {
                 ItemStack[] itemsToDrop = item.getTier().getRepairIngredient().getItems();
 
                 for (ItemStack stack : itemsToDrop) {
-                    event.getPlayer().spawnAtLocation(stack);
+                    event.getEntity().spawnAtLocation(stack);
                 }
             }
         }
