@@ -156,9 +156,7 @@ public class ForgeCommon {
             if (originalStack.getItem() instanceof TieredItem item) {
                 ItemStack[] itemsToDrop = item.getTier().getRepairIngredient().getItems();
 
-                for (ItemStack stack : itemsToDrop) {
-                    event.getPlayer().spawnAtLocation(stack);
-                }
+                event.getPlayer().spawnAtLocation(itemsToDrop[0]);
             }
         }
     }
